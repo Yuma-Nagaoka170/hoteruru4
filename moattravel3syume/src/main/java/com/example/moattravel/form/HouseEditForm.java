@@ -12,6 +12,12 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class HouseEditForm {
+	
+
+	public HouseEditForm() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
 	@NotNull
 	private Integer id;
 	

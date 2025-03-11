@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<div th:replace="~{fragment :: meta}"></div>
 	
@@ -26,7 +26,7 @@
 						
 						<h1 class="mb-4 text-center">民宿情報編集</h1>
 						
-						<form method="post" th:action="@{/admin/houses/__${housesEditForm.getId()}__/update}" th:object="${houseEditForm}" enctype="multipart/form-data">
+						<form method="post" th:action="@{/admin/houses/__${houseEditForm.getId()}__/update}" th:object="${houseEditForm}" enctype="multipart/form-data">
 							<input type="hidden" th:field="*{id}">
 							
 							<div class="form-group row mb-3">
@@ -45,7 +45,7 @@
 									</div>
 								    <div class="col-md-8">
 										<div th:if="${#fields.hasErrors('imageFile')}" class="text-danger small mb-2" th:errors="*{imageFile}"></div>
-										<input type="file" class="form-control" th:field="{imageFile}">
+										<input type="file" class="form-control" th:field="*{imageFile}">
 										</div>
 									</div>
 									
@@ -99,7 +99,7 @@
 														</div>
 														<div class="col-md-8">
 															<div th:if="${#fields.hasErrors('address')}" class="text-danger small mb-2" th:errors="*{address}"></div>
-															<input type="text" class="form-control" th:field="{*address}">
+															<input type="text" class="form-control" th:field="*{address}">
 															</div>
 														</div>
 														
