@@ -21,7 +21,7 @@ public class WebSecurityConfig {
 	            .ignoringRequestMatchers("/batch/daily-logins") // ここで無効化
 	        )
 		.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/", "/batch/daily-logins") .permitAll()//全てのユーザーにアクセスを許可するURL
+				.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/", "/batch/daily-logins", "/signup/**") .permitAll()//全てのユーザーにアクセスを許可するURL
 				.requestMatchers("/admin/**").hasRole("ADMIN")//管理者にのみアクセスを許可する
 				.anyRequest().authenticated() //上記以外のURLはログインが必要（会員または管理者のどちらでもOK）
 				)
