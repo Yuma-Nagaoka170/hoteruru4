@@ -52,6 +52,10 @@
 						</a>
 						
 						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownGeneral">
+							<a class="dropdown-item moattravel-dropdown-item" th:href="@{/user}">会員情報</a>
+                            
+							<div class="dropdown-divider"></div>						
+						
 							<a class="dropdown-item moattravel-dropdown-item" th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 								ログアウト
 							</a>
@@ -77,6 +81,7 @@
 							</div>
 						</li>
 					</ul>
+				</div>
 		</div>
 	</nav>
   </div>
