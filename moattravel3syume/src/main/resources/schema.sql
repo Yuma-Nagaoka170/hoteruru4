@@ -1,6 +1,7 @@
 -- 既存テーブルを削除（開発環境のみ）
 DROP TABLE IF EXISTS verification_tokens;
 DROP TABLE IF EXISTS login_logs;
+DROP TABLE IF EXISTS reservations;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS houses;
@@ -51,6 +52,21 @@ CREATE TABLE IF NOT EXISTS verification_tokens(
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+ CREATE TABLE IF NOT EXISTS reservations (
+     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+     house_id BIGINT NOT NULL,
+     user_id BIGINT NOT NULL,
+     checkin_date DATE NOT NULL,
+     checkout_date DATE NOT NULL,
+     number_of_people INT NOT NULL,
+     amount INT NOT NULL,
+     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     FOREIGN KEY (house_id) REFERENCES houses (id),
+     FOREIGN KEY (user_id) REFERENCES users (id)
+ );
+
 
 -- login_logsテーブル
 CREATE TABLE IF NOT EXISTS login_logs (
