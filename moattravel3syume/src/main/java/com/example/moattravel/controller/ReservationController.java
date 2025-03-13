@@ -1,6 +1,9 @@
 package com.example.moattravel.controller;
 
+
 import java.time.LocalDate;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,17 +29,20 @@ import com.example.moattravel.repository.HouseRepository;
 import com.example.moattravel.repository.ReservationRepository;
 import com.example.moattravel.security.UserDetailsImpl;
 import com.example.moattravel.service.ReservationService;
+import com.example.moattravel.service.StripeService;
 
 @Controller
 public class ReservationController {
 	private final ReservationRepository reservationRepository;
 	private final HouseRepository houseRepository;
 	private final ReservationService reservationService;
+	private final StripeService stripeService;
 	
-	public ReservationController(ReservationRepository reservationRepository, HouseRepository houseRepository, ReservationService reservationService) {
+	public ReservationController(ReservationRepository reservationRepository, HouseRepository houseRepository, ReservationService reservationService,StripeService stripeService) {
 		this.reservationRepository = reservationRepository;
 		this.houseRepository = houseRepository;
 		this.reservationService = reservationService;
+		this.stripeService = stripeService;
 	}
 	
 	@GetMapping("/reservations")
@@ -61,7 +67,7 @@ public class ReservationController {
 		Integer capacity = house.getCapacity();
 		
 		if (numberOfPeople !=null) {
-			if(!reservationService.isWithinCapcity(numberOfPeople, capacity)) {
+			if(!reservationService.isWithinCapacity(numberOfPeople, capacity)) {
 				FieldError fieldError = new FieldError(bindingResult.getObjectName(), "numberOfPeople", "宿泊人数が定員を超えています。");
 				bindingResult.addError(fieldError);
 			}
@@ -83,6 +89,7 @@ public class ReservationController {
 	public String confirm(@PathVariable(name = "id") Integer id,
 			@ModelAttribute ReservationInputForm reservationInputForm,
 			@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+			HttpServletRequest httpServletRequest,
 			Model model)
 	{
 		House house = houseRepository.getReferenceById(id);	
@@ -98,12 +105,22 @@ public class ReservationController {
 		
 		ReservationRegisterForm reservationRegisterForm = new ReservationRegisterForm(house.getId(), user.getId(), checkinDate.toString(), checkoutDate.toString(), reservationInputForm.getNumberOfPeople(), amount);
 		
+		String sessionId = stripeService.createStripeSession(house.getName(), reservationRegisterForm, httpServletRequest);
+		
 		model.addAttribute("house",house);
 		model.addAttribute("reservationRegisterForm", reservationRegisterForm);
+		model.addAttribute("sessionId", sessionId);
 		
 		return "reservations/confirm";
 	}
 	
+	/*@PostMapping("/houses/{id}/reservations/create")
+	public String create(@ModelAttribute ReservationRegisterForm reservationRegisterForm) {
+		reservationService.create(reservationRegisterForm);
+		
+		return "redirect:/reservations?reserved";
+	}
+	*/
 	
 
 }
